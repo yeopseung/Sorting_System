@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.ViewHolder> implements MarkerItemTouchHelperCallback.OnItemTouchListener {
 
@@ -20,12 +23,12 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.ViewHolder
     private Context mContext;
 
 
-
     public MarkerAdapter(ArrayList<AddressItem> addressItems, Context mContext, OnStartDragListener onStartDragListener) {
         this.onStartDragListener = onStartDragListener;
         this.items = addressItems;
         this.mContext = mContext;
         mDBHelper = new DBHelper(mContext);
+
     }
 
     public void addItem(AddressItem item){
@@ -63,10 +66,15 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.ViewHolder
     public void removeItem(int position){
         AddressItem addressItem = items.get(position);
         int id=addressItem.getId();
+
         mDBHelper.deleteAddress(id);
+
         items.remove(position);
         notifyItemRemoved(position);
+
     }
+
+
 
 
 
