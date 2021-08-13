@@ -91,12 +91,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                         @Override
                         public void onClick(DialogInterface dialogInterface, int position) {
                             if(position == 0) {
-                                    // 삭제하기
-                                    int id=addressItem.getId();
-                                    mDBHelper.deleteAddress(id);
+                                // 삭제하기
+                                int id=addressItem.getId();
+                                mDBHelper.deleteAddress(id);
                                 mAddressItems.remove(curPos);
-                                    notifyItemRemoved(curPos);
-                                    Toast.makeText(mContext,"목록이 제거 되었습니다.", Toast.LENGTH_SHORT).show();
+                                notifyItemRemoved(curPos);
+                                Toast.makeText(mContext,"목록이 제거 되었습니다.", Toast.LENGTH_SHORT).show();
 
                             }
 

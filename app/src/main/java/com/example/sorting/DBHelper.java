@@ -1,4 +1,3 @@
-
 package com.example.sorting;
 
 import android.content.Context;
@@ -13,6 +12,8 @@ import java.util.ArrayList;
 public class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "final.db";
+
+    static Context context; // dbsize용
 
     public DBHelper(@Nullable Context context) {
 
@@ -75,10 +76,49 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-//    // swap 문
-//    public void swapAdress(int from_id, int to_id) {
-//        SQLiteDatabase db = getWritableDatabase();
-//        db.execSQL("update t set id = (case when from_id = 1)");
-//    }
+    public void swapAddress(ArrayList<AddressItem> items, int from_id, int to_id) {
+        SQLiteDatabase db = getWritableDatabase();
 
+        int tempId;
+        String tempNumber;      //운송장번호
+        String tempAddress;     //주소
+        double tempLatitude;     //위도
+        double tempLongitude;    //경도
+
+        tempId = items.get(to_id).getId();
+        tempNumber = items.get(from_id).getNumber();
+        tempAddress = items.get(from_id).getAddress();
+        tempLatitude = items.get(from_id).getLatitude();
+        tempLongitude = items.get(from_id).getLongitude();
+        db.execSQL("UPDATE AddressList SET number = '" + tempNumber + "', address = '" + tempAddress + "', latitude = '" + tempLatitude + "', longitude = '" + tempLongitude + "' WHERE id = '" + tempId + "'");
+
+        tempId = items.get(from_id).getId();
+        tempNumber = items.get(to_id).getNumber();
+        tempAddress = items.get(to_id).getAddress();
+        tempLatitude = items.get(to_id).getLatitude();
+        tempLongitude = items.get(to_id).getLongitude();
+        db.execSQL("UPDATE AddressList SET number = '" + tempNumber + "', address = '" + tempAddress + "', latitude = '" + tempLatitude + "', longitude = '" + tempLongitude + "' WHERE id = '" + tempId + "'");
+
+
+    }
+
+    public static int dbSize(){
+        int size;
+
+        DBHelper tDBHelper = new DBHelper(context);
+        ArrayList<AddressItem> tAddressItems = new ArrayList<>();
+        tAddressItems = tDBHelper.getAddressList();
+        size = tAddressItems.size();
+
+        return size;
+    } // DB table 개수를 리턴해주는 메소드
+
+    public void dbInitialize(){
+
+        ArrayList<AddressItem> addressItems = new ArrayList<>();
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM AddressList");
+
+    } // DB 초기화
 }

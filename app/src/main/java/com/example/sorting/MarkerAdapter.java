@@ -47,11 +47,15 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.ViewHolder
     //목록 이동
     @Override
     public boolean moveItem(int fromPosition, int toPosition){
-        AddressItem text = items.get(fromPosition);
-        int fromId = text.getId();
-        items.remove(fromPosition);
-        items.add(toPosition, text);
-        notifyItemMoved(fromPosition,toPosition);
+        AddressItem text = items.get(fromPosition); //클릭된 위치의 테이블이 text에 저장됨
+        int fromId = text.getId(); //fromId에 text의 id값 저장
+        int toId = items.get(toPosition).getId();
+
+        mDBHelper.swapAddress(items,fromPosition,toPosition);// DB에서 swapping
+
+        items.remove(fromPosition); // MarkerAdapter가 필드로 갖고있는 DB복사본에서 클릭된 위치의 테이블 삭제
+        items.add(toPosition, text); // 선택한 위치에 text를 추가
+        notifyItemMoved(fromPosition,toPosition); // RecyclerView에 반영
         return true;
     }
     //목록 삭제

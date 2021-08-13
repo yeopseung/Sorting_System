@@ -24,6 +24,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <activity android:name=".contents"/>
+        <activity android:name=".ListMaking"/>
         <activity android:name=".reading" />
         <activity android:name=".search" />
         <activity android:name=".GoogleMapActivity"/>

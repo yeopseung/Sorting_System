@@ -211,10 +211,10 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         }
 
         for(int i=0;i< mAddressItems.size();i++){
-        mLatitude = mAddressItems.get(i).getLatitude();
-        mLongitude = mAddressItems.get(i).getLongitude();
-        mAddress = mAddressItems.get(i).getAddress();
-        NewMarker(mAddress,mLatitude,mLongitude);
+            mLatitude = mAddressItems.get(i).getLatitude();
+            mLongitude = mAddressItems.get(i).getLongitude();
+            mAddress = mAddressItems.get(i).getAddress();
+            NewMarker(mAddress,mLatitude,mLongitude);
         }
 //        NewMarker(37.478593, 126.866050, "광명고등학교");
 //        NewMarker(37.48704614469403, 126.86800142510582, "광명북초등학교");
@@ -232,7 +232,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 //
 //            try{
 //                addresses = geocoder.getFromLocationName(address,1);
-//            }catch (IOException e){
+//            }catch                                                                                                                             (IOException e){
 //                e.printStackTrace();
 //                Log.d("tag","onComplete: 주소변환 실패");
 //            }
