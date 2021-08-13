@@ -36,7 +36,7 @@ public class ListMaking extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mDBHelper.dbInitialize();
+                mDBHelper.dbInitialize(); // db 초기화
 
 //                Intent intent = new Intent(ListMaking.this,reading.class);
 //                startActivity(intent);

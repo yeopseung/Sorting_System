@@ -121,5 +121,5 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM AddressList");
 
-    }
+    } // DB 초기화
 }

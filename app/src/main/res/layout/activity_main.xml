@@ -12,13 +12,13 @@
         android:id="@+id/barcode"
         android:layout_width="match_parent"
         android:layout_height="68dp"
-        android:text="바코드 조회" />
+        android:text="택배 목록 생성하기" />
 
     <Button
         android:id="@+id/contents"
         android:layout_width="match_parent"
         android:layout_height="88dp"
-        android:text="기존 목록 불러오기" />
+        android:text="택배 목록 확인하기" />
 
     <Button
         android:id="@+id/googleMap"
