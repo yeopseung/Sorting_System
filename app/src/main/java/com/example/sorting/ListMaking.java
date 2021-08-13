@@ -1,10 +1,13 @@
 package com.example.sorting;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +26,26 @@ public class ListMaking extends AppCompatActivity {
         oldList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 팝업 창 띄우기
+                Dialog dialog = new Dialog(ListMaking.this, android.R.style.Theme_Material_Light_Dialog);
+                dialog.setContentView(R.layout.dialog_edit);
+                EditText et_number = dialog.findViewById(R.id.et_number);
+                EditText et_address = dialog.findViewById(R.id.et_address);
+                EditText et_latitude = dialog.findViewById(R.id.et_latitude);
+                EditText et_longitude = dialog.findViewById(R.id.et_longitude);
+                Button btn_ok = dialog.findViewById(R.id.btn_ok);
+
+
+                btn_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // insert DB
+                        mDBHelper.InsertAddress(et_number.getText().toString(),et_address.getText().toString(),Double.parseDouble(et_latitude.getText().toString()),Double.parseDouble(et_latitude.getText().toString()));
+                        Toast.makeText(ListMaking.this, "할일 목록에 추가 되었습니다 !", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                dialog.show();
 
 
 

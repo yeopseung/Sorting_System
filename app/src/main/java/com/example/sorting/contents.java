@@ -21,7 +21,6 @@ public class contents extends AppCompatActivity {
         setContentView(R.layout.activity_contents);
 
         mDBHelper.InsertAddress("1","광명고등학교",37.478593,126.866050);
-        mDBHelper.InsertAddress("2","가온고등학교",37.478593,126.866050);
 
         setInit();
     }
