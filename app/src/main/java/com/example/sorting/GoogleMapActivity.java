@@ -232,7 +232,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 //
 //            try{
 //                addresses = geocoder.getFromLocationName(address,1);
-//            }catch (IOException e){
+//            }catch                                                                                                                             (IOException e){
 //                e.printStackTrace();
 //                Log.d("tag","onComplete: 주소변환 실패");
 //            }
