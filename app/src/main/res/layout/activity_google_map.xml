@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:background="#FF66"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <androidx.recyclerview.widget.RecyclerView
