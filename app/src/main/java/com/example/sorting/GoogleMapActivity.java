@@ -68,7 +68,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     private MarkerAdapter adapter;
     private ItemTouchHelper itemTouchHelper;
-
+    private Algorithm algorithm = new Algorithm(this);
 
 
 
@@ -166,7 +166,14 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         });
 
 
-
+        Button sort_button = findViewById(R.id.sort_button);
+        sort_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<AddressItem> addressItems = mDBHelper.getAddressList();
+                algorithm.sortAlgorithm(addressItems,37.47716016671259, 126.86673391650392);
+            }
+        });
 
     }
 
