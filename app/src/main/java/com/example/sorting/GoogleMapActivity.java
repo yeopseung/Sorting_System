@@ -2,8 +2,11 @@ package com.example.sorting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +38,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
@@ -42,6 +46,7 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback, MarkerAdapter.OnStartDragListener {
@@ -49,7 +54,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
     Animation translateLeftAnim;
     Animation translateRightAnim;
-    LinearLayout markerlist;
+    ConstraintLayout markerlist;
     Button button;
     boolean isPageOpen=false;
     private DBHelper mDBHelper = new DBHelper(this);
@@ -72,12 +77,12 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_google_map);
 
 
+        //DB에 있는 리스트 불러오기
         mAddressItems = new ArrayList<>();
         mAddressItems = mDBHelper.getAddressList();
         if(adapter == null){
-            adapter = new MarkerAdapter(mAddressItems,this,this);}
-
-
+            adapter = new MarkerAdapter(mAddressItems,this,this);
+        }
 
 //        AddressItem addressItem = new AddressItem();
 //        addressItem.setId(1);
@@ -87,9 +92,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 //        addressItem.setLongitude(126.866050);
 //
 
-
-
-
+        //mapFragment 선언
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -113,7 +116,8 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
                 .start();
 
 
-        //뷰
+
+        //슬라이딩 애니메이션을 활용 (화면 열기, 닫기)
         markerlist= findViewById(R.id.markerlist);
         translateLeftAnim = AnimationUtils.loadAnimation(this,R.anim.translate_left);
         translateRightAnim = AnimationUtils.loadAnimation(this,R.anim.translate_right);
@@ -122,7 +126,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         translateLeftAnim.setAnimationListener(animListener);
         translateRightAnim.setAnimationListener(animListener);
 
-        button = findViewById(R.id.button6);
+        button = findViewById(R.id.sliding_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,30 +140,40 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
+
+        //RecyclerView 연결
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
-
-
-
-
-
-
-//        adapter.addItem(new Marker("광명북초등학교",37.48704614469403, 126.86800142510582));
-//        adapter.addItem(new Marker("광명동초등학교",37.484143880672896, 126.86361479883942));
-//        adapter.addItem(new Marker("도덕초등학교",37.48511581598014, 126.87027489645584));
-
         recyclerView.setAdapter(adapter);
 
+
+        //삭제, 이동을 위한 itemTouchHelper
         itemTouchHelper = new ItemTouchHelper(new MarkerItemTouchHelperCallback(adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
 
+        //화면 업데이트 버튼 (마커 삭제 or 수정한 것을 적용)
+        Button apply_button = findViewById(R.id.apply_button);
+        apply_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateGoogleMap();
+            }
+        });
+
+
+
+
     }
+
+
+
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
     }
+
 
     class SlidingAnimationListener implements Animation.AnimationListener{
 
@@ -210,12 +224,16 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         }
 
-        for(int i=0;i< mAddressItems.size();i++){
-        mLatitude = mAddressItems.get(i).getLatitude();
-        mLongitude = mAddressItems.get(i).getLongitude();
-        mAddress = mAddressItems.get(i).getAddress();
-        NewMarker(mAddress,mLatitude,mLongitude);
+
+        //현재 마커 갱신
+        for (int i=0;i< mAddressItems.size();i++){
+            mLatitude = mAddressItems.get(i).getLatitude();
+            mLongitude = mAddressItems.get(i).getLongitude();
+            mAddress = mAddressItems.get(i).getAddress();
+            NewMarker(mAddress,mLatitude,mLongitude);
         }
+
+
 //        NewMarker(37.478593, 126.866050, "광명고등학교");
 //        NewMarker(37.48704614469403, 126.86800142510582, "광명북초등학교");
 //        NewMarker(37.484143880672896, 126.86361479883942, "광명동초등학교");
@@ -232,7 +250,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 //
 //            try{
 //                addresses = geocoder.getFromLocationName(address,1);
-//            }catch                                                                                                                             (IOException e){
+//            }catch (IOException e){
 //                e.printStackTrace();
 //                Log.d("tag","onComplete: 주소변환 실패");
 //            }
@@ -272,12 +290,32 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
 
     //새로운 마커를 추가해주는 함수 (위도, 경도, 주소) 입력
-    public void NewMarker(String name, double latitude, double longtitude){
+    public Marker NewMarker(String name, double latitude, double longtitude){
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(new LatLng(latitude, longtitude));
         markerOptions.title(name);
-        googleMap.addMarker(markerOptions);
+        Marker marker = googleMap.addMarker(markerOptions);
+        return marker;
     }
+
+
+    //GPS
+    class GPSListener implements LocationListener {
+        public void onLocationChanged(Location location) {
+//            Double latitude = location.getLatitude();
+//            Double longitude = location.getLongitude();
+//
+//            String message = "내 위치 -> Latitude : "+ latitude + "\nLongitude:"+ longitude;
+//            Log.d("Map", message);
+        }
+
+        public void onProviderDisabled(String provider) { }
+
+        public void onProviderEnabled(String provider) { }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) { }
+    }
+
 
     //GPS를 활용한 현 위치 제공 함수
     public void startLocationService() {
@@ -288,10 +326,9 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-                String message = "최근 위치 -> Latitude : " + latitude + "\nLongitude:" + longitude;
-
-                Log.d("Map", message);
-
+//                String message = "최근 위치 -> Latitude : " + latitude + "\nLongitude:" + longitude;
+//
+//                Log.d("Map", message);
                 showCurrentLocation(latitude, longitude);  //GPS로 받은 위도 경도 전달
             }
 
@@ -311,29 +348,27 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    //GPS 함수
-    class GPSListener implements LocationListener {
-        public void onLocationChanged(Location location) {
-            Double latitude = location.getLatitude();
-            Double longitude = location.getLongitude();
-
-            String message = "내 위치 -> Latitude : "+ latitude + "\nLongitude:"+ longitude;
-            Log.d("Map", message);
-
-
-        }
-
-        public void onProviderDisabled(String provider) { }
-
-        public void onProviderEnabled(String provider) { }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) { }
-    }
 
     //현 위치를 마커를 찍어 보여줌
     private void showCurrentLocation(Double latitude, Double longitude) {
         LatLng curPoint = new LatLng(latitude, longitude);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 15));
         NewMarker("현 위치",latitude,longitude);
+    }
+
+    //구글맵 새로고침 (마커 업데이트에 활용)
+    public void updateGoogleMap(){
+
+        try {
+            Intent intent = getIntent();
+            finish(); //현재 액티비티 종료
+            overridePendingTransition(0, 0);
+            startActivity(intent); //현재 액티비티 재실행
+            overridePendingTransition(0, 0);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
