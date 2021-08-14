@@ -20,7 +20,7 @@ public class contents extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contents);
 
-        mDBHelper.InsertAddress("1","광명고등학교",37.478593,126.866050);
+//        mDBHelper.InsertAddress("1","광명고등학교",37.478593,126.866050);
 
         setInit();
     }
@@ -40,4 +40,9 @@ public class contents extends AppCompatActivity {
             mRv_sorting.setAdapter(mAdapter);
         }
     }
+    public int getSize(){
+        mAddressItems = mDBHelper.getAddressList();
+        return mAddressItems.size();
+    }
+
 }

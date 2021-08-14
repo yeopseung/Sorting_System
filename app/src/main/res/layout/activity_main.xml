@@ -32,4 +32,11 @@
         android:layout_height="88dp"
         android:text="T map 연동하기" />
 
+    <Button
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:text="Test" />
+
+
 </LinearLayout>

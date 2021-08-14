@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.view.ContextMenu;
 
 import androidx.annotation.Nullable;
 
@@ -13,12 +14,14 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "final.db";
 
-    static Context context; // dbsize용
+   // static Context context; // dbsize용
 
     public DBHelper(@Nullable Context context) {
-
         super(context, DB_NAME, null, DB_VERSION);
     }
+
+
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -102,16 +105,16 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public static int dbSize(){
-        int size;
-
-        DBHelper tDBHelper = new DBHelper(context);
-        ArrayList<AddressItem> tAddressItems = new ArrayList<>();
-        tAddressItems = tDBHelper.getAddressList();
-        size = tAddressItems.size();
-
-        return size;
-    } // DB table 개수를 리턴해주는 메소드
+//    public static int dbSize(){
+//        int size;
+//
+//        DBHelper tDBHelper = new DBHelper(context);
+//        ArrayList<AddressItem> tAddressItems = new ArrayList<>();
+//        tAddressItems = tDBHelper.getAddressList();
+//        size = tAddressItems.size();
+//
+//        return size;
+//    } // DB table 개수를 리턴해주는 메소드
 
     public void dbInitialize(){
 

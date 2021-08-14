@@ -12,11 +12,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class ListMaking extends AppCompatActivity {
     private Button newList;
     private Button oldList;
     private DBHelper mDBHelper = new DBHelper(this);
-
+    private Algorithm algorithm = new Algorithm(this);
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class ListMaking extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         // insert DB
-                        mDBHelper.InsertAddress(et_number.getText().toString(),et_address.getText().toString(),Double.parseDouble(et_latitude.getText().toString()),Double.parseDouble(et_latitude.getText().toString()));
+                        mDBHelper.InsertAddress(et_number.getText().toString(),et_address.getText().toString(),Double.parseDouble(et_latitude.getText().toString()),Double.parseDouble(et_longitude.getText().toString()));
                         Toast.makeText(ListMaking.this, "할일 목록에 추가 되었습니다 !", Toast.LENGTH_SHORT).show();
 
                     }
@@ -58,8 +60,9 @@ public class ListMaking extends AppCompatActivity {
         newList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mDBHelper.dbInitialize(); // db 초기화
+                ArrayList<AddressItem> addressItems = mDBHelper.getAddressList();
+                algorithm.sortAlgorithm(addressItems,37.47716016671259, 126.86673391650392);
+               // mDBHelper.dbInitialize(); // db 초기화
 
 //                Intent intent = new Intent(ListMaking.this,reading.class);
 //                startActivity(intent);
