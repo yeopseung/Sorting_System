@@ -22,7 +22,7 @@
         android:layout_gravity="bottom"
         android:background="#E6EE9C"
 
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <androidx.recyclerview.widget.RecyclerView
