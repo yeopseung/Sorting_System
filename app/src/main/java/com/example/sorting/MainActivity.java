@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private Button search;
     private Button googleMap;
     private Button tmap;
-    private Button test;
+//    private Button test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,14 +51,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        test = findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListMaking.class);
-                startActivity(intent);
-            }
-        });
+//        test = findViewById(R.id.test);
+//        test.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, ListMaking.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
 

@@ -60,9 +60,9 @@ public class ListMaking extends AppCompatActivity {
         newList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<AddressItem> addressItems = mDBHelper.getAddressList();
-                algorithm.sortAlgorithm(addressItems,37.47716016671259, 126.86673391650392);
-               // mDBHelper.dbInitialize(); // db 초기화
+//                ArrayList<AddressItem> addressItems = mDBHelper.getAddressList();
+//                algorithm.sortAlgorithm(addressItems,37.47716016671259, 126.86673391650392);
+                mDBHelper.dbInitialize(); // db 초기화
 
 //                Intent intent = new Intent(ListMaking.this,reading.class);
 //                startActivity(intent);
