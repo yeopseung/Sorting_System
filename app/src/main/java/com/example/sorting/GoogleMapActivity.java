@@ -64,7 +64,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
     private String mAddress;
     private double mLongitude;
     private double mLatitude;
-
+    private Location curLocation;
 
     private MarkerAdapter adapter;
     private ItemTouchHelper itemTouchHelper;
@@ -171,7 +171,7 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onClick(View v) {
                 ArrayList<AddressItem> addressItems = mDBHelper.getAddressList();
-                algorithm.sortAlgorithm(addressItems,37.47716016671259, 126.86673391650392);
+                algorithm.sortAlgorithm(addressItems,curLocation.getLatitude(),curLocation.getLongitude());  //현재 위치를 알고리즘에 반영
             }
         });
 
@@ -333,13 +333,16 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         try {
             Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
+                curLocation = location;
 //                String message = "최근 위치 -> Latitude : " + latitude + "\nLongitude:" + longitude;
 //
 //                Log.d("Map", message);
                 showCurrentLocation(latitude, longitude);  //GPS로 받은 위도 경도 전달
+
             }
 
             GPSListener gpsListener = new GPSListener();
@@ -356,13 +359,14 @@ public class GoogleMapActivity extends AppCompatActivity implements OnMapReadyCa
         } catch(SecurityException e) {
             e.printStackTrace();
         }
+
     }
 
 
     //현 위치를 마커를 찍어 보여줌
     private void showCurrentLocation(Double latitude, Double longitude) {
         LatLng curPoint = new LatLng(latitude, longitude);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 15));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 15));
         NewMarker("현 위치",latitude,longitude);
     }
 
